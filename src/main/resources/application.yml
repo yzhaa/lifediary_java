@@ -1,0 +1,31 @@
+server:
+  servlet:
+    context-path:
+  port: 8081
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/life_diary?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: yzh12345.
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 80MB
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+  global-config:
+    db-config:
+      logic-not-delete-value: 0
+      logic-delete-value: 1
