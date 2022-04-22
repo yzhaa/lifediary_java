@@ -26,6 +26,7 @@ import java.util.List;
 public class PictureUtil {
 
     static Log log = LogFactory.getLog(PictureUtil.class);
+  public   static final String INITIAL_PATH = "pic/initial/icon_test.png";
 
 
     public static String uploadImage(MultipartFile image, String subDirectory) {

@@ -35,6 +35,7 @@ public class DiaryController {
     @Autowired
     DiaryImageServiceImpl diaryImageService;
 
+
     @Autowired
     LikeServiceImpl likeService;
 
@@ -99,6 +100,7 @@ public class DiaryController {
         return new MyMessage<>(0, null, "删除失败");
     }
 
+    //详情,获得很多
     @GetMapping("/get")
     public MyMessage<List<DiaryItemOv>> getDiaryOV(HttpSession session) {
         User user = (User) MySecurityConfig.currentUser(session);
@@ -115,6 +117,17 @@ public class DiaryController {
         return new MyMessage<>(0, new DiaryDetails().setImages(imageList).setDiary(diary), "查询成功");
     }
 
+    @GetMapping("/collect")
+    public MyMessage<List<DiaryItemOv>> getCollect(HttpSession session) {
+        User user = (User) MySecurityConfig.currentUser(session);
+        return new MyMessage<>(0, diaryService.getBaseMapper().getCollect(user.getId()), "查询成功");
+    }
+
+
+    @GetMapping("/person/{id}")
+    public MyMessage<List<DiaryItemOv>> getPerson(@PathVariable("id") int id) {
+        return new MyMessage<>(0, diaryService.getBaseMapper().getPerson(id), "查询成功");
+    }
 
 }
 
