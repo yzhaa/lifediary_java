@@ -7,16 +7,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import yzh.lifediary.config.MySecurityConfig;
 import yzh.lifediary.entity.MyMessage;
 import yzh.lifediary.entity.User;
 import yzh.lifediary.entity.ov.DiaryItemOv;
 import yzh.lifediary.entity.ov.Search;
-import yzh.lifediary.entity.ov.UserOV;
-import yzh.lifediary.service.UserService;
+import yzh.lifediary.entity.ov.UserFollowOV;
 import yzh.lifediary.service.impl.DiaryServiceImpl;
-import yzh.lifediary.service.impl.FollowServiceImpl;
 import yzh.lifediary.service.impl.UserServiceImpl;
 import yzh.lifediary.util.PictureUtil;
 
@@ -119,7 +116,7 @@ public class UserController {
     }
 
     @GetMapping("/follow")
-    public MyMessage<List<UserOV>> getFollow(HttpSession session) {
+    public MyMessage<List<UserFollowOV>> getFollow(HttpSession session) {
         User user = (User) MySecurityConfig.currentUser(session);
         return new MyMessage<>(0, userService.getBaseMapper().getFollow(user.getId()), "查询成功");
     }
@@ -140,15 +137,13 @@ public class UserController {
     @GetMapping("search/r/{condition}")
     public MyMessage<Search> searchResult(HttpSession session,@PathVariable("condition") String content) {
         User user = (User) MySecurityConfig.currentUser(session);
-        List<User> users = userService.list(new QueryWrapper<User>().like("name", content));
+        List<UserFollowOV> users = userService.getBaseMapper().getUserAndIsFollow(content,user.getId());
         List<DiaryItemOv> diaryItemOvs = diaryService.getBaseMapper().getSearchTitle(content, user.getId());
-
-        return new MyMessage<>(0, new Search().setDiarys(diaryItemOvs).setUsers(users), "查询成功");
+        return new MyMessage<>(0, new Search().setDiarys(diaryItemOvs).setUserFollowOVS(users), "查询成功");
     }
 
     @GetMapping("search/m/{condition}")
     public MyMessage<List<String>> searchMatch(HttpSession session,@PathVariable("condition") String content) {
-        User user = (User) MySecurityConfig.currentUser(session);
         List<String> list = new LinkedList<>();
         List<String> users = userService.getBaseMapper().getNames(content);
         List<String> diaryItemOvs = diaryService.getBaseMapper().getTitle(content);

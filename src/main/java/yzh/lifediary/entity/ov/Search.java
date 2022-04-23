@@ -12,7 +12,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class Search {
-    private List<User> users;
+    private List<UserFollowOV> userFollowOVS;
     private List<DiaryItemOv> diarys;
 
 }

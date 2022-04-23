@@ -3,17 +3,15 @@ package yzh.lifediary.mapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import yzh.lifediary.entity.Role;
 import yzh.lifediary.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import yzh.lifediary.entity.ov.UserOV;
+import yzh.lifediary.entity.ov.UserFollowOV;
 
-import javax.annotation.processing.RoundEnvironment;
 import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author yzh
@@ -31,15 +29,19 @@ public interface UserMapper extends BaseMapper<User> {
 //    @Select("select user.*, picture.path from picture,user where user.icon =picture.id and user.account=123")
 //    User getUserWithIcon(@Param("account") String account);
 
-    @Select("select id,name,icon_path from  user where id in (select mid from follow where yid =#{id})")
-    List<UserOV> getFollow(@Param("id") int id);
+    @Select("select id,name,icon_path, 1 follow from  user where id in (select mid from follow where yid =#{id})")
+    List<UserFollowOV> getFollow(@Param("id") int id);
 
     @Insert("insert into user(account,name,password,icon_path) values(#{account},#{name},#{password},#{icon_path})")
-    boolean addUser(@Param("account") int account,  @Param("name") String name,@Param("password") String password, @Param("icon_path") String iconPath);
+    boolean addUser(@Param("account") int account, @Param("name") String name, @Param("password") String password, @Param("icon_path") String iconPath);
 
     //有SQL语法错误，在like那里
     @Select("select name from user where name like \"%\"#{name}\"%\"")
     List<String> getNames(@Param("name") String name);
 
-
+    @Select("select count(follow.id)>0 follow, user.id,name,icon_path from user left join follow on user.id =follow.mid and follow.yid=#{id}  " +
+            " where  user.name like \"%\"#{name}\"%\" group by user.id")
+    List<UserFollowOV> getUserAndIsFollow(@Param("name") String name,@Param("id") int id);
 }
+
+
