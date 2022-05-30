@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -149,7 +150,8 @@ public class UserController {
         List<String> diaryItemOvs = diaryService.getBaseMapper().getTitle(content);
         list.addAll(users);
         list.addAll(diaryItemOvs);
-        return new MyMessage<>(0, list, "查询成功");
+
+        return new MyMessage<>(0, list.stream().distinct().collect(Collectors.toList()), "查询成功");
     }
 
 }

@@ -125,8 +125,9 @@ public class DiaryController {
 
 
     @GetMapping("/person/{id}")
-    public MyMessage<List<DiaryItemOv>> getPerson(@PathVariable("id") int id) {
-        return new MyMessage<>(0, diaryService.getBaseMapper().getPerson(id), "查询成功");
+    public MyMessage<List<DiaryItemOv>> getPerson(HttpSession session,@PathVariable("id") int id) {
+        User user = (User) MySecurityConfig.currentUser(session);
+        return new MyMessage<>(0, diaryService.getBaseMapper().getPerson(user.getId(),id), "查询成功");
     }
 
 }

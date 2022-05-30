@@ -1,4 +1,4 @@
-package yzh.lifediary.common.exxception;
+package yzh.lifediary.common.exception;
 
 
 import org.springframework.http.HttpStatus;

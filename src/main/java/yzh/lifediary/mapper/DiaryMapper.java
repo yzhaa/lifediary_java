@@ -37,9 +37,9 @@ public interface DiaryMapper extends BaseMapper<Diary> {
     List<DiaryItemOv> getCollect(@Param("id") int id);
 
     @Select("select count(like.id)>0 isLike,date ,content, user.name username,diary_image.path mainPic ,diary.id id,title,like_count likeCount, " +
-            "user.id userId,icon_path userIcon from diary left join `like` on  like.d_id=diary.id and like.u_id=#{id},diary_image,user " +
-            " where diary.user_id=#{id} and user.id =diary.user_id and diary_image.diary_id=diary.id and diary_image.main=1  group by diary.id,diary_image.id")
-    List<DiaryItemOv> getPerson(@Param("id") int id);
+            "user.id userId,icon_path userIcon from diary left join `like` on  like.d_id=diary.id and like.u_id=#{nId},diary_image,user " +
+            " where diary.user_id=#{qId} and user.id =diary.user_id and diary_image.diary_id=diary.id and diary_image.main=1  group by diary.id,diary_image.id")
+    List<DiaryItemOv> getPerson(@Param("nId") int nUserId,@Param("qId") int qUserId);
 
     //有SQL语法错误，在like那里
     @Select("select title from diary where title like \"%\"#{title}\"%\"")
